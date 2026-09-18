@@ -1,0 +1,598 @@
+<title>臺北三重天氣卡</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --ground: #e9edef;
+    --surface: #fdfefe;
+    --surface-2: #f1f4f6;
+    --rule: #d3dade;
+    --rule-soft: #e3e9ec;
+    --ink: #131c23;
+    --ink-2: #4d5a64;
+    --ink-muted: #7f8d98;
+    --rain: #2c6fa6;
+    --rain-1: #d7e4f0;
+    --rain-2: #a8c7e1;
+    --rain-3: #6ba0cb;
+    --rain-4: #2c6fa6;
+    --temp: #c2791e;
+    --tint-sun: #f6ead4;
+    --tint-cloud: #e4eaee;
+    --tint-overcast: #dbe1e6;
+    --tint-rain: #dbe8f3;
+    --shadow: 0 1px 2px rgba(19, 28, 35, .06), 0 8px 24px -12px rgba(19, 28, 35, .18);
+    --font-zh: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    --font-ui: "IBM Plex Sans Condensed", "Noto Sans TC", sans-serif;
+    --font-num: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0e1418;
+      --surface: #171f25;
+      --surface-2: #1f272e;
+      --rule: #2b353d;
+      --rule-soft: #222b32;
+      --ink: #e7edf1;
+      --ink-2: #a4b1bb;
+      --ink-muted: #6f7d88;
+      --rain: #4a93d9;
+      --rain-1: #22384a;
+      --rain-2: #2e5877;
+      --rain-3: #3b7aa8;
+      --rain-4: #4a93d9;
+      --temp: #b8832b;
+      --tint-sun: #2c2617;
+      --tint-cloud: #222c34;
+      --tint-overcast: #1e262c;
+      --tint-rain: #1b2c3a;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .7);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0e1418;
+    --surface: #171f25;
+    --surface-2: #1f272e;
+    --rule: #2b353d;
+    --rule-soft: #222b32;
+    --ink: #e7edf1;
+    --ink-2: #a4b1bb;
+    --ink-muted: #6f7d88;
+    --rain: #4a93d9;
+    --rain-1: #22384a;
+    --rain-2: #2e5877;
+    --rain-3: #3b7aa8;
+    --rain-4: #4a93d9;
+    --temp: #b8832b;
+    --tint-sun: #2c2617;
+    --tint-cloud: #222c34;
+    --tint-overcast: #1e262c;
+    --tint-rain: #1b2c3a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .7);
+  }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-zh);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 16px;
+    padding-block: 28px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  /* -- masthead ------------------------------------------------------- */
+  .masthead { display: flex; flex-direction: column; gap: 6px; }
+
+  .eyebrow {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .masthead h1 {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  .masthead h1 .wd { color: var(--ink-2); font-weight: 600; }
+
+  .issued {
+    font-family: var(--font-num);
+    font-size: 11px;
+    color: var(--ink-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .sample {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--temp);
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    padding: 1px 5px;
+  }
+
+  /* -- card ----------------------------------------------------------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 12px;
+  }
+
+  .glyph { width: 30px; height: 30px; flex: none; }
+
+  .who { flex: 1; min-width: 0; }
+
+  .who h2 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: .01em;
+    line-height: 1.2;
+  }
+
+  .who .place-en {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .temps {
+    font-family: var(--font-num);
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    flex: none;
+  }
+
+  .temps .hi { font-size: 26px; font-weight: 600; color: var(--ink); line-height: 1; }
+  .temps .sep { font-size: 16px; color: var(--ink-muted); }
+  .temps .lo { font-size: 17px; color: var(--ink-2); }
+  .temps .unit { font-size: 11px; color: var(--ink-muted); margin-left: 2px; }
+
+  /* -- chart ---------------------------------------------------------- */
+  .plot { position: relative; padding: 0 10px 2px; }
+  .plot svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .tip-box {
+    position: absolute;
+    z-index: 3;
+    pointer-events: none;
+    background: var(--ink);
+    color: var(--surface);
+    border-radius: 6px;
+    padding: 7px 9px;
+    font-family: var(--font-num);
+    font-size: 11px;
+    line-height: 1.5;
+    white-space: nowrap;
+    transform: translate(-50%, -100%);
+    opacity: 0;
+    transition: opacity .12s ease;
+  }
+  .tip-box[data-on="1"] { opacity: 1; }
+  .tip-box b { font-weight: 600; font-family: var(--font-zh); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tip-box { transition: none; }
+  }
+
+  /* -- readout -------------------------------------------------------- */
+  .readout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 11px 16px 13px;
+    border-top: 1px solid var(--rule-soft);
+    background: var(--surface-2);
+  }
+
+  .readout .line { font-size: 14px; color: var(--ink); flex: 1; min-width: 160px; }
+  .readout .line .num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--rain);
+    background: var(--rain-1);
+    border-radius: 999px;
+    padding: 4px 10px 4px 8px;
+    flex: none;
+  }
+  .pill svg { width: 13px; height: 13px; }
+
+  /* -- table ---------------------------------------------------------- */
+  .table-bar { display: flex; justify-content: flex-end; }
+
+  .toggle {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 6px 11px;
+    cursor: pointer;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--ink-muted); }
+  .toggle:focus-visible { outline: 2px solid var(--rain); outline-offset: 2px; }
+
+  .table-wrap {
+    overflow-x: auto;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+
+  table { border-collapse: collapse; width: 100%; font-size: 12px; }
+
+  caption {
+    text-align: left;
+    padding: 11px 14px 8px;
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  th, td {
+    padding: 6px 14px;
+    text-align: right;
+    border-top: 1px solid var(--rule-soft);
+    font-family: var(--font-num);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  th { color: var(--ink-muted); font-weight: 500; font-size: 11px; }
+  th:first-child, td:first-child { text-align: left; }
+  td.wx { font-family: var(--font-zh); color: var(--ink-2); }
+
+  /* -- footer --------------------------------------------------------- */
+  footer {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-muted);
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+  }
+  footer code {
+    font-family: var(--font-num);
+    font-size: 10.5px;
+    background: var(--surface-2);
+    border: 1px solid var(--rule-soft);
+    border-radius: 3px;
+    padding: 1px 4px;
+  }
+</style>
+
+<main class="sheet">
+  <header class="masthead">
+    <div class="eyebrow">中央氣象署 · 鄉鎮逐三小時預報</div>
+    <h1>明天 9/19<span class="wd">（六）</span></h1>
+    <div class="issued">
+      <span>9/18 18:00 發報</span>
+      <span class="sample">範例資料</span>
+    </div>
+  </header>
+
+  <div id="cards"></div>
+
+  <div class="table-bar">
+    <button class="toggle" id="tableToggle" aria-expanded="false" aria-controls="tables">顯示資料表</button>
+  </div>
+  <div id="tables" hidden></div>
+
+  <footer>
+    資料來源：交通部中央氣象署開放資料平臺，鄉鎮天氣預報 <code>F-D0047</code>，每 6 小時更新一次。
+    預報精度為 3 小時一格，圖上不呈現比這更細的時間。
+    虛線是判定「有雨」的門檻 <code>RAIN_POP_THRESHOLD = 60</code>，與 <code>forecast.py</code> 的規則相同。
+  </footer>
+</main>
+
+<script>
+  const REPORT = [
+    {
+      name: "臺北市", en: "Taipei City", cat: "thunder",
+      tmin: 25, tmax: 33,
+      line: '<span class="num">12–18 時</span> 短暫雷陣雨 <span class="num">70%</span>，其餘時間多雲到晴',
+      tip: "帶傘",
+      slots: [
+        { h: 0,  wx: "多雲",             cat: "cloudy",  pop: 10, t: 26 },
+        { h: 3,  wx: "多雲",             cat: "cloudy",  pop: 10, t: 25 },
+        { h: 6,  wx: "晴時多雲",         cat: "sunny",   pop: 10, t: 27 },
+        { h: 9,  wx: "晴時多雲",         cat: "sunny",   pop: 10, t: 31 },
+        { h: 12, wx: "多雲午後短暫雷陣雨", cat: "thunder", pop: 70, t: 33 },
+        { h: 15, wx: "多雲午後短暫雷陣雨", cat: "thunder", pop: 60, t: 30 },
+        { h: 18, wx: "多雲",             cat: "cloudy",  pop: 20, t: 28 },
+        { h: 21, wx: "多雲",             cat: "cloudy",  pop: 20, t: 27 }
+      ]
+    },
+    {
+      name: "新北市三重區", en: "Sanchong, New Taipei", cat: "cloudy",
+      tmin: 25, tmax: 32,
+      line: '凌晨有雨，<span class="num">06 時</span>後整天多雲',
+      tip: null,
+      slots: [
+        { h: 0,  wx: "陰短暫雨", cat: "rain",     pop: 60, t: 25 },
+        { h: 3,  wx: "陰",       cat: "overcast", pop: 30, t: 25 },
+        { h: 6,  wx: "多雲",     cat: "cloudy",   pop: 20, t: 26 },
+        { h: 9,  wx: "多雲",     cat: "cloudy",   pop: 20, t: 30 },
+        { h: 12, wx: "多雲",     cat: "cloudy",   pop: 20, t: 32 },
+        { h: 15, wx: "多雲",     cat: "cloudy",   pop: 20, t: 31 },
+        { h: 18, wx: "多雲",     cat: "cloudy",   pop: 20, t: 28 },
+        { h: 21, wx: "多雲",     cat: "cloudy",   pop: 20, t: 27 }
+      ]
+    }
+  ];
+
+  // Icon shapes are inlined rather than referenced through <symbol>/<use>,
+  // which clipped to its own viewport at these sizes.
+  const ICON = {
+    sun: `<circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="1.8"/>`
+       + `<g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">`
+       + `<path d="M12 2.8v2.2M12 19v2.2M2.8 12h2.2M19 12h2.2M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6"/></g>`,
+    cloud: `<path d="M7.2 18.3h9.2a4.2 4.2 0 0 0 .4-8.3 5.8 5.8 0 0 0-11-1.7 3.8 3.8 0 0 0 1.4 10z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>`,
+    overcast: `<path d="M7.2 18.3h9.2a4.2 4.2 0 0 0 .4-8.3 5.8 5.8 0 0 0-11-1.7 3.8 3.8 0 0 0 1.4 10z" fill="currentColor" fill-opacity=".2" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>`,
+    rain: `<path d="M7.4 15.2h9a4 4 0 0 0 .4-8 5.6 5.6 0 0 0-10.6-1.6 3.7 3.7 0 0 0 1.2 9.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>`
+        + `<g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9.2 18l-.9 2.6M13 18l-.9 2.6M16.8 18l-.9 2.6"/></g>`,
+    thunder: `<path d="M7.4 15.2h9a4 4 0 0 0 .4-8 5.6 5.6 0 0 0-10.6-1.6 3.7 3.7 0 0 0 1.2 9.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>`
+           + `<path d="M13.2 16.4l-3.4 4h3l-1.2 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>`,
+    umbrella: `<path d="M12 3.4v1.3M3 13.1a9 9 0 0 1 18 0zM12 13.1v6a2 2 0 0 1-4 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>`
+  };
+  const catColor = (cat) => (cat === "sunny" ? "var(--temp)" : "var(--rain)");
+  const ICON_KEY = { sunny: "sun", cloudy: "cloud", overcast: "overcast", rain: "rain", thunder: "thunder" };
+  const iconKey = (cat) => ICON_KEY[cat] || "cloud";
+  function iconAt(cat, cx, cy, size) {
+    const k = (size / 24).toFixed(4);
+    return `<g transform="translate(${(cx - size / 2).toFixed(1)} ${(cy - size / 2).toFixed(1)}) scale(${k})"`
+      + ` style="color:${catColor(cat)}">${ICON[iconKey(cat)]}</g>`;
+  }
+
+  const TINT = { sunny: "var(--tint-sun)", cloudy: "var(--tint-cloud)", overcast: "var(--tint-overcast)", rain: "var(--tint-rain)", thunder: "var(--tint-rain)" };
+  const CAT_ZH = { sunny: "晴", cloudy: "多雲", overcast: "陰", rain: "雨", thunder: "雷雨" };
+  const RAIN_THRESHOLD = 60;
+
+  // Sequential ramp: one hue, light to dark, stepped by magnitude.
+  function popFill(pop) {
+    if (pop < 20) return "var(--rain-1)";
+    if (pop < 40) return "var(--rain-2)";
+    if (pop < RAIN_THRESHOLD) return "var(--rain-3)";
+    return "var(--rain-4)";
+  }
+
+  const W = 360, X0 = 4, PW = 352, SW = PW / 8;
+  const STRIP_Y = 14, STRIP_H = 26;
+  const POP_TOP = 62, POP_BASE = 118, POP_H = POP_BASE - POP_TOP;
+  const T_TOP = 140, T_BOT = 170;
+  const H = 206;
+
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const slotCx = (i) => X0 + i * SW + SW / 2;
+
+  function barPath(x, w, top, base) {
+    const r = Math.min(4, (base - top) / 2);
+    if (base - top < 5) return `M${x} ${base - 2.5}h${w}v2.5h${-w}z`;
+    return `M${x} ${base}V${top + r}a${r} ${r} 0 0 1 ${r} ${-r}h${w - 2 * r}a${r} ${r} 0 0 1 ${r} ${r}V${base}z`;
+  }
+
+  function chart(loc) {
+    const pops = loc.slots.map((s) => s.pop);
+    const maxPop = Math.max(...pops, RAIN_THRESHOLD + 10);
+    const popY = (p) => POP_BASE - (p / maxPop) * POP_H;
+
+    const temps = loc.slots.map((s) => s.t);
+    const tLo = Math.min(...temps), tHi = Math.max(...temps);
+    const tSpan = Math.max(tHi - tLo, 1);
+    const tempY = (t) => T_BOT - ((t - tLo) / tSpan) * (T_BOT - T_TOP);
+
+    let s = "";
+
+    // Track 1 — condition. Identity comes from the icon shape, not the tint alone.
+    s += `<text x="${X0}" y="8" class="tlabel">天氣</text>`;
+    loc.slots.forEach((d, i) => {
+      const x = X0 + i * SW;
+      s += `<rect x="${(x + 1.5).toFixed(1)}" y="${STRIP_Y}" width="${(SW - 3).toFixed(1)}" height="${STRIP_H}" rx="3" fill="${TINT[d.cat]}"/>`;
+      s += iconAt(d.cat, slotCx(i), STRIP_Y + STRIP_H / 2, 18);
+    });
+
+    // Track 2 — precipitation probability, sequential ramp on one scale.
+    s += `<text x="${X0}" y="56" class="tlabel">降雨機率 <tspan class="tunit">%</tspan></text>`;
+    const thY = popY(RAIN_THRESHOLD);
+    s += `<line x1="${X0}" y1="${thY.toFixed(1)}" x2="${X0 + PW}" y2="${thY.toFixed(1)}" class="thresh"/>`;
+    s += `<text x="${X0 + PW}" y="${(thY - 3).toFixed(1)}" class="threshlab" text-anchor="end">判定有雨 ${RAIN_THRESHOLD}</text>`;
+    s += `<line x1="${X0}" y1="${POP_BASE}" x2="${X0 + PW}" y2="${POP_BASE}" class="axis"/>`;
+    loc.slots.forEach((d, i) => {
+      const bw = SW - 9, x = X0 + i * SW + 4.5, top = popY(d.pop);
+      s += `<path d="${barPath(x, bw, top, POP_BASE)}" fill="${popFill(d.pop)}"/>`;
+      if (d.pop >= 40) {
+        s += `<text x="${slotCx(i).toFixed(1)}" y="${(top - 4).toFixed(1)}" class="val" text-anchor="middle">${d.pop}</text>`;
+      }
+    });
+
+    // Track 3 — temperature, a single series on its own scale.
+    s += `<text x="${X0}" y="136" class="tlabel">氣溫 <tspan class="tunit">°C</tspan></text>`;
+    const pts = loc.slots.map((d, i) => `${slotCx(i).toFixed(1)},${tempY(d.t).toFixed(1)}`);
+    s += `<polyline points="${pts.join(" ")}" fill="none" stroke="var(--temp)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+    loc.slots.forEach((d, i) => {
+      if (d.t !== tHi && d.t !== tLo) return;
+      if (d.t === tHi && temps.indexOf(tHi) !== i) return;
+      if (d.t === tLo && temps.indexOf(tLo) !== i) return;
+      const cx = slotCx(i), cy = tempY(d.t);
+      s += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="4" fill="var(--temp)" stroke="var(--surface)" stroke-width="2"/>`;
+      const up = d.t === tHi;
+      s += `<text x="${cx.toFixed(1)}" y="${(cy + (up ? -9 : 14)).toFixed(1)}" class="val temp" text-anchor="middle">${d.t}</text>`;
+    });
+
+    // Shared x axis: the 3-hour grid the forecast itself is published on.
+    for (let h = 0; h <= 24; h += 3) {
+      const x = X0 + (h / 3) * SW;
+      s += `<line x1="${x.toFixed(1)}" y1="${T_BOT + 22}" x2="${x.toFixed(1)}" y2="${T_BOT + (h % 6 === 0 ? 27 : 25)}" class="tick"/>`;
+      if (h % 6 === 0) {
+        s += `<text x="${x.toFixed(1)}" y="${H - 1}" class="hour" text-anchor="${h === 0 ? "start" : h === 24 ? "end" : "middle"}">${String(h).padStart(2, "0")}</text>`;
+      }
+    }
+
+    // Hover columns, sized to the whole slot so the target beats the mark.
+    loc.slots.forEach((d, i) => {
+      s += `<rect class="hit" x="${(X0 + i * SW).toFixed(1)}" y="0" width="${SW.toFixed(1)}" height="${H}"
+            fill="transparent" data-i="${i}" tabindex="0" role="img"
+            aria-label="${esc(`${String(d.h).padStart(2, "0")} 到 ${String(d.h + 3).padStart(2, "0")} 時，${d.wx}，降雨機率 ${d.pop}%，氣溫 ${d.t} 度`)}"/>`;
+    });
+
+    return `<svg viewBox="0 0 ${W} ${H}" role="group" aria-label="${esc(loc.name)}明日逐三小時預報圖">${s}</svg>`;
+  }
+
+  function card(loc, idx) {
+    return `<section class="card">
+      <div class="card-head">
+        <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true" style="color:${catColor(loc.cat)}">${ICON[iconKey(loc.cat)]}</svg>
+        <div class="who">
+          <h2>${esc(loc.name)}</h2>
+          <div class="place-en">${esc(loc.en)}</div>
+        </div>
+        <div class="temps">
+          <span class="hi">${loc.tmax}</span><span class="sep">/</span><span class="lo">${loc.tmin}</span><span class="unit">°C</span>
+        </div>
+      </div>
+      <div class="plot" data-idx="${idx}">
+        ${chart(loc)}
+        <div class="tip-box" role="status" aria-live="polite"></div>
+      </div>
+      <div class="readout">
+        <div class="line">${loc.line}</div>
+        ${loc.tip ? `<span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true">${ICON.umbrella}</svg>${esc(loc.tip)}</span>` : ""}
+      </div>
+    </section>`;
+  }
+
+  function table(loc) {
+    const rows = loc.slots.map((d) => `<tr>
+        <td>${String(d.h).padStart(2, "0")}–${String(d.h + 3).padStart(2, "0")}</td>
+        <td class="wx">${esc(d.wx)}</td>
+        <td>${d.pop}%</td>
+        <td>${d.t}°</td>
+      </tr>`).join("");
+    return `<div class="table-wrap">
+      <table>
+        <caption>${esc(loc.name)}</caption>
+        <thead><tr><th scope="col">時段</th><th scope="col">天氣</th><th scope="col">降雨機率</th><th scope="col">氣溫</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  }
+
+  document.getElementById("cards").innerHTML = REPORT.map(card).join("");
+  document.getElementById("tables").innerHTML =
+    `<div style="display:flex;flex-direction:column;gap:14px">${REPORT.map(table).join("")}</div>`;
+
+  const toggle = document.getElementById("tableToggle");
+  const tables = document.getElementById("tables");
+  toggle.addEventListener("click", () => {
+    const open = tables.hidden;
+    tables.hidden = !open;
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.textContent = open ? "隱藏資料表" : "顯示資料表";
+  });
+
+  document.querySelectorAll(".plot").forEach((plot) => {
+    const loc = REPORT[Number(plot.dataset.idx)];
+    const box = plot.querySelector(".tip-box");
+    const svg = plot.querySelector("svg");
+
+    const show = (rect) => {
+      const d = loc.slots[Number(rect.dataset.i)];
+      box.innerHTML = `${String(d.h).padStart(2, "0")}–${String(d.h + 3).padStart(2, "0")} 時<br>`
+        + `<b>${esc(d.wx)}</b><br>降雨 ${d.pop}% · ${d.t}°C`;
+      const r = rect.getBoundingClientRect(), p = plot.getBoundingClientRect();
+      box.style.left = Math.min(Math.max(r.left - p.left + r.width / 2, 62), p.width - 62) + "px";
+      box.style.top = (r.top - p.top + 62) + "px";
+      box.dataset.on = "1";
+    };
+    const hide = () => { box.dataset.on = "0"; };
+
+    svg.querySelectorAll(".hit").forEach((rect) => {
+      rect.addEventListener("mouseenter", () => show(rect));
+      rect.addEventListener("focus", () => show(rect));
+      rect.addEventListener("mouseleave", hide);
+      rect.addEventListener("blur", hide);
+    });
+    plot.addEventListener("mouseleave", hide);
+  });
+</script>
+
+<style>
+  .tlabel {
+    font-family: var(--font-ui);
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    fill: var(--ink-muted);
+  }
+  .tunit { font-family: var(--font-num); letter-spacing: 0; }
+  .axis { stroke: var(--rule); stroke-width: 1; }
+  .thresh { stroke: var(--rain-3); stroke-width: 1; stroke-dasharray: 3 3; }
+  .threshlab { font-family: var(--font-num); font-size: 7.5px; fill: var(--ink-muted); }
+  .tick { stroke: var(--rule); stroke-width: 1; }
+  .hour {
+    font-family: var(--font-num);
+    font-size: 8.5px;
+    font-weight: 500;
+    fill: var(--ink-muted);
+  }
+  .val {
+    font-family: var(--font-num);
+    font-size: 9px;
+    font-weight: 600;
+    fill: var(--rain);
+  }
+  .val.temp { fill: var(--temp); }
+  .hit { cursor: crosshair; }
+  .hit:focus-visible { outline: 2px solid var(--rain); outline-offset: -2px; }
+</style>
