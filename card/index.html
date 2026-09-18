@@ -17,6 +17,9 @@
     --rain-3: #6ba0cb;
     --rain-4: #2c6fa6;
     --temp: #c2791e;
+    --sun: #e8a21f;
+    --cloud-a: #9db4c6;
+    --cloud-b: #5f7385;
     --tint-sun: #f6ead4;
     --tint-cloud: #e4eaee;
     --tint-overcast: #dbe1e6;
@@ -43,6 +46,9 @@
       --rain-3: #3b7aa8;
       --rain-4: #4a93d9;
       --temp: #b8832b;
+      --sun: #b8832b;
+      --cloud-a: #6d8598;
+      --cloud-b: #b3c5d2;
       --tint-sun: #2c2617;
       --tint-cloud: #222c34;
       --tint-overcast: #1e262c;
@@ -66,6 +72,9 @@
     --rain-3: #3b7aa8;
     --rain-4: #4a93d9;
     --temp: #b8832b;
+    --sun: #b8832b;
+    --cloud-a: #6d8598;
+    --cloud-b: #b3c5d2;
     --tint-sun: #2c2617;
     --tint-cloud: #222c34;
     --tint-overcast: #1e262c;
@@ -153,7 +162,7 @@
     padding: 14px 16px 12px;
   }
 
-  .glyph { width: 30px; height: 30px; flex: none; }
+  .glyph { width: 32px; height: 32px; flex: none; }
 
   .who { flex: 1; min-width: 0; }
 
@@ -372,27 +381,46 @@
     }
   ];
 
-  // Icon shapes are inlined rather than referenced through <symbol>/<use>,
-  // which clipped to its own viewport at these sizes.
+  // Weather pictograms. Each category gets its own silhouette — sun behind a
+  // cloud, one cloud, two clouds, cloud with drops, cloud with a bolt — so the
+  // row stays readable even where the fills are close in value.
+  const CLOUD = `<circle cx="9" cy="13" r="4.2"/><circle cx="14.4" cy="12" r="5.3"/>`
+    + `<circle cx="18.2" cy="14.8" r="3.5"/><rect x="4.8" y="13.2" width="14.4" height="5.4" rx="2.7"/>`;
+  const cloud = (fill, tx = 0, ty = 0, k = 1) =>
+    `<g fill="${fill}" transform="translate(${tx} ${ty}) scale(${k})">${CLOUD}</g>`;
+
+  const drop = (cx, cy, k = 1, fill = "var(--rain)") =>
+    `<path transform="translate(${cx} ${cy}) scale(${k})" fill="${fill}"`
+    + ` d="M0 -3.1c1.5 1.9 2.2 2.9 2.2 3.8a2.2 2.2 0 0 1-4.4 0c0-.9.7-1.9 2.2-3.8z"/>`;
+
+  function sun(cx, cy, r, fill) {
+    let d = "";
+    for (let a = 0; a < 360; a += 45) {
+      const t = (a * Math.PI) / 180, c = Math.cos(t), n = Math.sin(t);
+      d += `M${(cx + c * (r + 1.8)).toFixed(1)} ${(cy + n * (r + 1.8)).toFixed(1)}`
+         + `L${(cx + c * (r + 3.6)).toFixed(1)} ${(cy + n * (r + 3.6)).toFixed(1)}`;
+    }
+    return `<path d="${d}" fill="none" stroke="${fill}" stroke-width="2.1" stroke-linecap="round"/>`
+      + `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}"/>`;
+  }
+
   const ICON = {
-    sun: `<circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="1.8"/>`
-       + `<g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">`
-       + `<path d="M12 2.8v2.2M12 19v2.2M2.8 12h2.2M19 12h2.2M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6"/></g>`,
-    cloud: `<path d="M7.2 18.3h9.2a4.2 4.2 0 0 0 .4-8.3 5.8 5.8 0 0 0-11-1.7 3.8 3.8 0 0 0 1.4 10z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>`,
-    overcast: `<path d="M7.2 18.3h9.2a4.2 4.2 0 0 0 .4-8.3 5.8 5.8 0 0 0-11-1.7 3.8 3.8 0 0 0 1.4 10z" fill="currentColor" fill-opacity=".2" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>`,
-    rain: `<path d="M7.4 15.2h9a4 4 0 0 0 .4-8 5.6 5.6 0 0 0-10.6-1.6 3.7 3.7 0 0 0 1.2 9.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>`
-        + `<g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9.2 18l-.9 2.6M13 18l-.9 2.6M16.8 18l-.9 2.6"/></g>`,
-    thunder: `<path d="M7.4 15.2h9a4 4 0 0 0 .4-8 5.6 5.6 0 0 0-10.6-1.6 3.7 3.7 0 0 0 1.2 9.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>`
-           + `<path d="M13.2 16.4l-3.4 4h3l-1.2 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>`,
+    sun: sun(9.6, 9.4, 4.3, "var(--sun)") + cloud("var(--cloud-a)", 6.6, 6.6, 0.74),
+    cloud: cloud("var(--cloud-a)", 0, 0.6),
+    overcast: cloud("var(--cloud-a)", -1, -3, 0.62) + cloud("var(--cloud-b)", 0, 2.6, 0.95),
+    rain: cloud("var(--cloud-a)", 0, -2, 0.92)
+      + drop(8.4, 18.4) + drop(12.4, 19.6) + drop(16.4, 18.4),
+    thunder: cloud("var(--cloud-a)", 0, -3.6, 0.92)
+      + drop(7.2, 18.6, 0.68) + drop(17.4, 18.6, 0.68)
+      + `<path d="M13.6 12.2 9.2 18.8h2.7l-1.5 3.8 4.9-7h-2.8z" fill="var(--sun)" stroke-linejoin="round"/>`,
     umbrella: `<path d="M12 3.4v1.3M3 13.1a9 9 0 0 1 18 0zM12 13.1v6a2 2 0 0 1-4 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>`
   };
-  const catColor = (cat) => (cat === "sunny" ? "var(--temp)" : "var(--rain)");
   const ICON_KEY = { sunny: "sun", cloudy: "cloud", overcast: "overcast", rain: "rain", thunder: "thunder" };
   const iconKey = (cat) => ICON_KEY[cat] || "cloud";
   function iconAt(cat, cx, cy, size) {
     const k = (size / 24).toFixed(4);
-    return `<g transform="translate(${(cx - size / 2).toFixed(1)} ${(cy - size / 2).toFixed(1)}) scale(${k})"`
-      + ` style="color:${catColor(cat)}">${ICON[iconKey(cat)]}</g>`;
+    return `<g transform="translate(${(cx - size / 2).toFixed(1)} ${(cy - size / 2).toFixed(1)}) scale(${k})">`
+      + `${ICON[iconKey(cat)]}</g>`;
   }
 
   const TINT = { sunny: "var(--tint-sun)", cloudy: "var(--tint-cloud)", overcast: "var(--tint-overcast)", rain: "var(--tint-rain)", thunder: "var(--tint-rain)" };
@@ -408,10 +436,10 @@
   }
 
   const W = 360, X0 = 4, PW = 352, SW = PW / 8;
-  const STRIP_Y = 14, STRIP_H = 26;
-  const POP_TOP = 62, POP_BASE = 118, POP_H = POP_BASE - POP_TOP;
-  const T_TOP = 140, T_BOT = 170;
-  const H = 206;
+  const STRIP_Y = 14, STRIP_H = 31;
+  const POP_TOP = 67, POP_BASE = 123, POP_H = POP_BASE - POP_TOP;
+  const T_TOP = 145, T_BOT = 175;
+  const H = 211;
 
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
   const slotCx = (i) => X0 + i * SW + SW / 2;
@@ -439,11 +467,11 @@
     loc.slots.forEach((d, i) => {
       const x = X0 + i * SW;
       s += `<rect x="${(x + 1.5).toFixed(1)}" y="${STRIP_Y}" width="${(SW - 3).toFixed(1)}" height="${STRIP_H}" rx="3" fill="${TINT[d.cat]}"/>`;
-      s += iconAt(d.cat, slotCx(i), STRIP_Y + STRIP_H / 2, 18);
+      s += iconAt(d.cat, slotCx(i), STRIP_Y + STRIP_H / 2, 23);
     });
 
     // Track 2 — precipitation probability, sequential ramp on one scale.
-    s += `<text x="${X0}" y="56" class="tlabel">降雨機率 <tspan class="tunit">%</tspan></text>`;
+    s += `<text x="${X0}" y="61" class="tlabel">降雨機率 <tspan class="tunit">%</tspan></text>`;
     const thY = popY(RAIN_THRESHOLD);
     s += `<line x1="${X0}" y1="${thY.toFixed(1)}" x2="${X0 + PW}" y2="${thY.toFixed(1)}" class="thresh"/>`;
     s += `<text x="${X0 + PW}" y="${(thY - 3).toFixed(1)}" class="threshlab" text-anchor="end">判定有雨 ${RAIN_THRESHOLD}</text>`;
@@ -457,7 +485,7 @@
     });
 
     // Track 3 — temperature, a single series on its own scale.
-    s += `<text x="${X0}" y="136" class="tlabel">氣溫 <tspan class="tunit">°C</tspan></text>`;
+    s += `<text x="${X0}" y="141" class="tlabel">氣溫 <tspan class="tunit">°C</tspan></text>`;
     const pts = loc.slots.map((d, i) => `${slotCx(i).toFixed(1)},${tempY(d.t).toFixed(1)}`);
     s += `<polyline points="${pts.join(" ")}" fill="none" stroke="var(--temp)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
     loc.slots.forEach((d, i) => {
@@ -492,7 +520,7 @@
   function card(loc, idx) {
     return `<section class="card">
       <div class="card-head">
-        <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true" style="color:${catColor(loc.cat)}">${ICON[iconKey(loc.cat)]}</svg>
+        <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true">${ICON[iconKey(loc.cat)]}</svg>
         <div class="who">
           <h2>${esc(loc.name)}</h2>
           <div class="place-en">${esc(loc.en)}</div>
