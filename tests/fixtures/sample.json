@@ -1,0 +1,1147 @@
+{
+ "success": "true",
+ "result": {
+  "resource_id": "F-D0047-093",
+  "fields": []
+ },
+ "records": {
+  "Locations": [
+   {
+    "DatasetDescription": "臺灣各縣市鄉鎮未來3天(逐3小時)天氣預報",
+    "LocationsName": "臺北市",
+    "Dataid": "D0047-061",
+    "Location": [
+     {
+      "LocationName": "臺北市",
+      "Geocode": "63000000",
+      "Latitude": "25.0",
+      "Longitude": "121.5",
+      "WeatherElement": [
+       {
+        "ElementName": "溫度",
+        "Time": [
+         {
+          "DataTime": "2026-09-18T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "26"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-18T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "26"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "26"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "25"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "27"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T09:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "31"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T12:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "33"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T15:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "30"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "28"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "27"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-20T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "26"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-20T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "26"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "ElementName": "體感溫度",
+        "Time": [
+         {
+          "DataTime": "2026-09-18T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "28"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-18T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "28"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "28"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "27"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "29"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T09:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "34"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T12:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "37"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T15:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "33"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "30"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "29"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-20T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "28"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-20T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "28"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "ElementName": "3小時降雨機率",
+        "Time": [
+         {
+          "StartTime": "2026-09-18T18:00:00+08:00",
+          "EndTime": "2026-09-18T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-18T21:00:00+08:00",
+          "EndTime": "2026-09-19T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T00:00:00+08:00",
+          "EndTime": "2026-09-19T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "10"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T03:00:00+08:00",
+          "EndTime": "2026-09-19T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "10"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T06:00:00+08:00",
+          "EndTime": "2026-09-19T09:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "10"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T09:00:00+08:00",
+          "EndTime": "2026-09-19T12:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "10"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T12:00:00+08:00",
+          "EndTime": "2026-09-19T15:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "70"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T15:00:00+08:00",
+          "EndTime": "2026-09-19T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "60"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T18:00:00+08:00",
+          "EndTime": "2026-09-19T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T21:00:00+08:00",
+          "EndTime": "2026-09-20T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T00:00:00+08:00",
+          "EndTime": "2026-09-20T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T03:00:00+08:00",
+          "EndTime": "2026-09-20T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "ElementName": "天氣現象",
+        "Time": [
+         {
+          "StartTime": "2026-09-18T18:00:00+08:00",
+          "EndTime": "2026-09-18T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-18T21:00:00+08:00",
+          "EndTime": "2026-09-19T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T00:00:00+08:00",
+          "EndTime": "2026-09-19T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T03:00:00+08:00",
+          "EndTime": "2026-09-19T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T06:00:00+08:00",
+          "EndTime": "2026-09-19T09:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "晴時多雲",
+            "WeatherCode": "1"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T09:00:00+08:00",
+          "EndTime": "2026-09-19T12:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "晴時多雲",
+            "WeatherCode": "1"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T12:00:00+08:00",
+          "EndTime": "2026-09-19T15:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲午後短暫雷陣雨",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T15:00:00+08:00",
+          "EndTime": "2026-09-19T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲午後短暫雷陣雨",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T18:00:00+08:00",
+          "EndTime": "2026-09-19T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T21:00:00+08:00",
+          "EndTime": "2026-09-20T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T00:00:00+08:00",
+          "EndTime": "2026-09-20T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T03:00:00+08:00",
+          "EndTime": "2026-09-20T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "ElementName": "天氣預報綜合描述",
+        "Time": [
+         {
+          "StartTime": "2026-09-18T18:00:00+08:00",
+          "EndTime": "2026-09-18T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-18T21:00:00+08:00",
+          "EndTime": "2026-09-19T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T00:00:00+08:00",
+          "EndTime": "2026-09-19T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。降雨機率10%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T03:00:00+08:00",
+          "EndTime": "2026-09-19T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。降雨機率10%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T06:00:00+08:00",
+          "EndTime": "2026-09-19T09:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "晴時多雲。降雨機率10%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T09:00:00+08:00",
+          "EndTime": "2026-09-19T12:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "晴時多雲。降雨機率10%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T12:00:00+08:00",
+          "EndTime": "2026-09-19T15:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲午後短暫雷陣雨。降雨機率70%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T15:00:00+08:00",
+          "EndTime": "2026-09-19T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲午後短暫雷陣雨。降雨機率60%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T18:00:00+08:00",
+          "EndTime": "2026-09-19T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。降雨機率20%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T21:00:00+08:00",
+          "EndTime": "2026-09-20T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。降雨機率20%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T00:00:00+08:00",
+          "EndTime": "2026-09-20T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T03:00:00+08:00",
+          "EndTime": "2026-09-20T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "DatasetDescription": "臺灣各縣市鄉鎮未來3天(逐3小時)天氣預報",
+    "LocationsName": "新北市",
+    "Dataid": "D0047-069",
+    "Location": [
+     {
+      "LocationName": "三重區",
+      "Geocode": "6500200",
+      "Latitude": "25.0",
+      "Longitude": "121.5",
+      "WeatherElement": [
+       {
+        "ElementName": "溫度",
+        "Time": [
+         {
+          "DataTime": "2026-09-18T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "26"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-18T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "26"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "25"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "25"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "26"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T09:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "30"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T12:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "32"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T15:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "31"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "28"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "27"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-20T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "26"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-20T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "Temperature": "26"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "ElementName": "體感溫度",
+        "Time": [
+         {
+          "DataTime": "2026-09-18T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "28"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-18T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "28"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "27"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "27"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "28"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T09:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "32"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T12:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "34"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T15:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "33"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "30"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-19T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "29"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-20T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "28"
+           }
+          ]
+         },
+         {
+          "DataTime": "2026-09-20T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "ApparentTemperature": "28"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "ElementName": "3小時降雨機率",
+        "Time": [
+         {
+          "StartTime": "2026-09-18T18:00:00+08:00",
+          "EndTime": "2026-09-18T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-18T21:00:00+08:00",
+          "EndTime": "2026-09-19T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T00:00:00+08:00",
+          "EndTime": "2026-09-19T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "60"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T03:00:00+08:00",
+          "EndTime": "2026-09-19T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "30"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T06:00:00+08:00",
+          "EndTime": "2026-09-19T09:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T09:00:00+08:00",
+          "EndTime": "2026-09-19T12:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T12:00:00+08:00",
+          "EndTime": "2026-09-19T15:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T15:00:00+08:00",
+          "EndTime": "2026-09-19T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T18:00:00+08:00",
+          "EndTime": "2026-09-19T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T21:00:00+08:00",
+          "EndTime": "2026-09-20T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T00:00:00+08:00",
+          "EndTime": "2026-09-20T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T03:00:00+08:00",
+          "EndTime": "2026-09-20T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "ProbabilityOfPrecipitation": "20"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "ElementName": "天氣現象",
+        "Time": [
+         {
+          "StartTime": "2026-09-18T18:00:00+08:00",
+          "EndTime": "2026-09-18T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-18T21:00:00+08:00",
+          "EndTime": "2026-09-19T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T00:00:00+08:00",
+          "EndTime": "2026-09-19T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "陰短暫雨",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T03:00:00+08:00",
+          "EndTime": "2026-09-19T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "陰",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T06:00:00+08:00",
+          "EndTime": "2026-09-19T09:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T09:00:00+08:00",
+          "EndTime": "2026-09-19T12:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T12:00:00+08:00",
+          "EndTime": "2026-09-19T15:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T15:00:00+08:00",
+          "EndTime": "2026-09-19T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T18:00:00+08:00",
+          "EndTime": "2026-09-19T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T21:00:00+08:00",
+          "EndTime": "2026-09-20T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T00:00:00+08:00",
+          "EndTime": "2026-09-20T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T03:00:00+08:00",
+          "EndTime": "2026-09-20T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "Weather": "多雲",
+            "WeatherCode": "4"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "ElementName": "天氣預報綜合描述",
+        "Time": [
+         {
+          "StartTime": "2026-09-18T18:00:00+08:00",
+          "EndTime": "2026-09-18T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-18T21:00:00+08:00",
+          "EndTime": "2026-09-19T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T00:00:00+08:00",
+          "EndTime": "2026-09-19T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "陰短暫雨。降雨機率60%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T03:00:00+08:00",
+          "EndTime": "2026-09-19T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "陰。降雨機率30%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T06:00:00+08:00",
+          "EndTime": "2026-09-19T09:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。降雨機率20%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T09:00:00+08:00",
+          "EndTime": "2026-09-19T12:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。降雨機率20%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T12:00:00+08:00",
+          "EndTime": "2026-09-19T15:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。降雨機率20%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T15:00:00+08:00",
+          "EndTime": "2026-09-19T18:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。降雨機率20%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T18:00:00+08:00",
+          "EndTime": "2026-09-19T21:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。降雨機率20%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-19T21:00:00+08:00",
+          "EndTime": "2026-09-20T00:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。降雨機率20%。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T00:00:00+08:00",
+          "EndTime": "2026-09-20T03:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。"
+           }
+          ]
+         },
+         {
+          "StartTime": "2026-09-20T03:00:00+08:00",
+          "EndTime": "2026-09-20T06:00:00+08:00",
+          "ElementValue": [
+           {
+            "WeatherDescription": "多雲。"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}
