@@ -146,6 +146,15 @@
     padding: 1px 5px;
   }
 
+  .warn {
+    font-family: var(--font-zh);
+    font-size: 11px;
+    color: var(--temp);
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    padding: 1px 6px;
+  }
+
   /* -- card ----------------------------------------------------------- */
   .card {
     background: var(--surface);
@@ -324,11 +333,8 @@
 <main class="sheet">
   <header class="masthead">
     <div class="eyebrow">中央氣象署 · 鄉鎮逐三小時預報</div>
-    <h1>明天 9/19<span class="wd">（六）</span></h1>
-    <div class="issued">
-      <span>9/18 18:00 發報</span>
-      <span class="sample">範例資料</span>
-    </div>
+    <h1>__TITLE__</h1>
+    <div class="issued">__ISSUED__</div>
   </header>
 
   <div id="cards"></div>
@@ -346,40 +352,7 @@
 </main>
 
 <script>
-  const REPORT = [
-    {
-      name: "臺北市", en: "Taipei City", cat: "thunder",
-      tmin: 25, tmax: 33,
-      line: '<span class="num">12–18 時</span> 短暫雷陣雨 <span class="num">70%</span>，其餘時間多雲到晴',
-      tip: "帶傘",
-      slots: [
-        { h: 0,  wx: "多雲",             cat: "cloudy",  pop: 10, t: 26 },
-        { h: 3,  wx: "多雲",             cat: "cloudy",  pop: 10, t: 25 },
-        { h: 6,  wx: "晴時多雲",         cat: "sunny",   pop: 10, t: 27 },
-        { h: 9,  wx: "晴時多雲",         cat: "sunny",   pop: 10, t: 31 },
-        { h: 12, wx: "多雲午後短暫雷陣雨", cat: "thunder", pop: 70, t: 33 },
-        { h: 15, wx: "多雲午後短暫雷陣雨", cat: "thunder", pop: 60, t: 30 },
-        { h: 18, wx: "多雲",             cat: "cloudy",  pop: 20, t: 28 },
-        { h: 21, wx: "多雲",             cat: "cloudy",  pop: 20, t: 27 }
-      ]
-    },
-    {
-      name: "新北市三重區", en: "Sanchong, New Taipei", cat: "cloudy",
-      tmin: 25, tmax: 32,
-      line: '凌晨有雨，<span class="num">06 時</span>後整天多雲',
-      tip: null,
-      slots: [
-        { h: 0,  wx: "陰短暫雨", cat: "rain",     pop: 60, t: 25 },
-        { h: 3,  wx: "陰",       cat: "overcast", pop: 30, t: 25 },
-        { h: 6,  wx: "多雲",     cat: "cloudy",   pop: 20, t: 26 },
-        { h: 9,  wx: "多雲",     cat: "cloudy",   pop: 20, t: 30 },
-        { h: 12, wx: "多雲",     cat: "cloudy",   pop: 20, t: 32 },
-        { h: 15, wx: "多雲",     cat: "cloudy",   pop: 20, t: 31 },
-        { h: 18, wx: "多雲",     cat: "cloudy",   pop: 20, t: 28 },
-        { h: 21, wx: "多雲",     cat: "cloudy",   pop: 20, t: 27 }
-      ]
-    }
-  ];
+  const REPORT = __REPORT__;
 
   // Weather pictograms. Each category gets its own silhouette — sun behind a
   // cloud, one cloud, two clouds, cloud with drops, cloud with a bolt — so the

@@ -21,6 +21,8 @@ python3 forecast.py --style detail               # the long prose sentence
 python3 forecast.py 彰化縣/彰化市 --date 2026-09-20 --json
 python3 forecast.py --fixture tests/fixtures/sample.json --date 2026-09-19   # offline run
 
+python3 forecast.py --json | python3 build_card.py -o build/card.html        # web card
+
 python3 -m unittest discover -s tests -v                                     # all tests
 python3 -m unittest tests.test_forecast.WordingTests -v                      # one class
 python3 -m unittest tests.test_forecast.FixtureTests.test_taipei_narrative   # one test
@@ -59,10 +61,32 @@ Everything lives in `forecast.py`, in four stages that are kept separate on purp
 2026-09-19 for both default locations; `FixtureTests` pin the exact output strings, so
 any wording change must update those expectations deliberately.
 
+## The web card
+
+`card/template.html` is the page; `build_card.py` fills its three markers (`__TITLE__`,
+`__ISSUED__`, `__REPORT__`) from `forecast.py --json` and writes a standalone file. The
+split is deliberate: `forecast.py` decides what the weather is, `build_card.py` decides
+how it looks. Picking the pictogram (including splitting thunder off rain), the English
+subtitle, and the mono-wrapped numerals all live in the builder, so the forecast stays
+free of presentation concerns.
+
+The page draws three tracks per location on one shared 3-hour x axis: condition icons,
+precipitation-probability bars against the same `RAIN_POP_THRESHOLD` dashed line the
+script uses, and a temperature line. Colors are CSS tokens defined for light and dark;
+the accent pair was checked with the dataviz palette validator, so changing `--rain`,
+`--sun` or `--temp` means re-running it. Icons are inlined `<g>` markup rather than
+`<symbol>`/`<use>`, which clipped at these sizes.
+
+`build_card.py` refuses to write a page when every location failed, and shows a partial
+failure as a chip on the page instead of quietly dropping the location.
+
 ## Scheduling
 
 The Routine "每日明天天氣預報 18:00" (cron `0 10 * * *` UTC, fresh cloud session, push
-notification on completion) runs the prompt in `routine/PROMPT.md`. Editing that file
+notification on completion) runs the prompt in `routine/PROMPT.md`: fetch, build the
+card, update the artifact at its fixed URL in place, then push the compact text plus
+that link. The artifact URL must never change, so the prompt reads it before publishing
+and passes it as `url`. Editing that file
 does not update the Routine; change it at claude.ai/code/routines or via `/schedule
 update`, then mirror the change here. The Routine environment must allow
 `opendata.cwa.gov.tw` and provide `CWA_API_KEY`.

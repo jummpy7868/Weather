@@ -33,7 +33,10 @@
 1. `forecast.py` 向中央氣象署開放資料平台抓「鄉鎮天氣預報（逐 3 小時）」。
 2. 用固定規則把明天切成連續的天氣時段（晴 / 多雲 / 陰 / 雨），「幾點開始下雨」由資料決定，不靠猜。
 3. 依模板組成繁體中文。精簡版用 24 小時制（`12–18 時`）讓數字好掃；完整版用口語時段（中午 12 點、傍晚 6 點）。兩者都只對齊 3 小時格線，不說出資料沒有的精度。
-4. Claude 雲端 Routine 每天 18:00 執行腳本，把結果推播到手機，並留在同一個對話讓你追問其他地點。
+4. `build_card.py` 把同一份 JSON 灌進 `card/template.html`，產生網頁版預報卡。
+5. Claude 雲端 Routine 每天 18:00 跑完以上流程，推播精簡版加卡片連結，並留在同一個對話讓你追問其他地點。
+
+網頁版預報卡（每天更新，網址固定）：<https://claude.ai/artifact/EvdnK4Yx5WnzDQ8QkK7JKC>
 
 ## 設定
 
@@ -50,7 +53,9 @@ python3 forecast.py 彰化縣/彰化市 臺中市       # 指定地點，「縣�
 python3 forecast.py --style bar              # 加上時間軸圖示
 python3 forecast.py --style detail           # 完整敘述
 python3 forecast.py --date 2026-09-20 臺北市  # 指定日期（預設 tomorrow）
-python3 forecast.py --json                   # 輸出 JSON（含時段與原始 3 小時資料）
+python3 forecast.py --json                   # 輸出 JSON（含時段、逐 3 小時天氣與氣溫）
+
+python3 forecast.py --json | python3 build_card.py -o build/card.html   # 產生網頁版卡片
 ```
 
 只需要 Python 3.9 以上，沒有第三方套件。
@@ -74,3 +79,9 @@ python3 forecast.py --fixture tests/fixtures/sample.json --date 2026-09-19   # �
 ```
 
 `tests/fixtures/sample.json` 是依氣象署新版 JSON 格式手工製作的樣本，涵蓋 2026-09-19。
+離線產生一張標示為範例的卡片：
+
+```bash
+python3 forecast.py --fixture tests/fixtures/sample.json --date 2026-09-19 --json \
+  | python3 build_card.py --sample -o build/card.html
+```

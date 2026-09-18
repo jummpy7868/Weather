@@ -166,6 +166,7 @@ class Period:
     end: datetime
     weather: str
     pop: int | None
+    temp: int | None = None
 
     @property
     def is_rain(self) -> bool:
@@ -243,13 +244,20 @@ def extract_day(payload: dict, location: Location, day: date) -> DayForecast:
     for slot in elements.get("3小時降雨機率", []):
         pop_by_start[_parse_time(slot["StartTime"])] = _to_int(_value(slot, "ProbabilityOfPrecipitation"))
 
+    # 溫度 is published as instantaneous readings on the same 3-hour grid, so each
+    # weather period can carry the reading at its start.
+    temp_by_time: dict[datetime, int | None] = {}
+    for slot in elements.get("溫度", []):
+        temp_by_time[_parse_time(slot["DataTime"])] = _to_int(_value(slot, "Temperature"))
+
     periods: list[Period] = []
     for slot in elements.get("天氣現象", []):
         start = _parse_time(slot["StartTime"])
         end = _parse_time(slot["EndTime"])
         if start.date() != day:
             continue
-        periods.append(Period(start, end, _value(slot, "Weather") or "", pop_by_start.get(start)))
+        periods.append(Period(start, end, _value(slot, "Weather") or "",
+                              pop_by_start.get(start), temp_by_time.get(start)))
     periods.sort(key=lambda p: p.start)
     if not periods:
         raise RuntimeError(f"資料裡沒有 {day.isoformat()} 的預報（{location.display_name}）")
@@ -522,6 +530,8 @@ def to_json(forecast: DayForecast) -> dict:
         "icon": headline_icon(forecast),
         "text": render_compact(forecast),
         "detail": render_detail(forecast),
+        "timing": compact_timing(segment_periods(forecast.periods)),
+        "tip": (advice(forecast, segment_periods(forecast.periods)) or [None])[0],
         "segments": [
             {
                 "start_hour": s.start_hour,
@@ -536,8 +546,11 @@ def to_json(forecast: DayForecast) -> dict:
             {
                 "start": p.start.isoformat(),
                 "end": p.end.isoformat(),
+                "hour": p.start.hour,
                 "weather": p.weather,
+                "category": p.category,
                 "pop": p.pop,
+                "t": p.temp,
             }
             for p in forecast.periods
         ],
