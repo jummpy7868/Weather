@@ -75,6 +75,15 @@ COUNTY_LEVEL_DATASET = "F-D0047-089"
 
 WEEKDAY_ZH = "一二三四五六日"
 
+# One glyph per weather category, used for the headline and the timeline strip.
+ICONS = {
+    "thunder": "⛈️",
+    "rain": "🌧️",
+    "sunny": "☀️",
+    "cloudy": "⛅",
+    "overcast": "☁️",
+}
+
 
 # --------------------------------------------------------------------------
 # Location handling
@@ -171,6 +180,12 @@ class Period:
         if self.weather.startswith("陰"):
             return "overcast"
         return "cloudy"
+
+    @property
+    def icon(self) -> str:
+        if self.is_rain and "雷" in self.weather:
+            return ICONS["thunder"]
+        return ICONS[self.category]
 
 
 @dataclass
@@ -395,7 +410,8 @@ def advice(forecast: DayForecast, segments: list[Segment]) -> list[str]:
     return tips[:2]
 
 
-def render(forecast: DayForecast) -> str:
+def render_detail(forecast: DayForecast) -> str:
+    """Full prose sentence. Used when the reader asked for detail, not for the push."""
     segments = segment_periods(forecast.periods)
     day = forecast.day
     header = f"明天 {day.month}/{day.day}（{WEEKDAY_ZH[day.weekday()]}）{forecast.location_name}："
@@ -415,11 +431,97 @@ def render(forecast: DayForecast) -> str:
     return header + "。".join(sentences) + "。"
 
 
+# -- compact styles, built for a push notification ---------------------------
+
+
+_TIME_PREFIX = re.compile(r"^(午後|晚上|清晨|白天|夜晚|入夜後)")
+
+
+def day_segments(segments: list[Segment]) -> list[Segment]:
+    return [s for s in segments if s.end_hour > DAY_START_HOUR]
+
+
+def headline_icon(forecast: DayForecast) -> str:
+    """One glyph for the whole day: rain wins, otherwise the longest stretch."""
+    day = [p for p in forecast.periods if p.start.hour >= DAY_START_HOUR] or forecast.periods
+    rain = [p for p in day if p.is_rain]
+    if rain:
+        return ICONS["thunder"] if any("雷" in p.weather for p in rain) else ICONS["rain"]
+    longest = max(day_segments(segment_periods(day)) or segment_periods(day),
+                  key=lambda s: s.end_hour - s.start_hour)
+    return ICONS[longest.category]
+
+
+def compact_timing(segments: list[Segment]) -> str:
+    """The day in one short line, using a 24-hour clock so it scans fast."""
+    parts: list[str] = []
+    if any(s.category == "rain" and s.end_hour <= DAY_START_HOUR for s in segments):
+        parts.append("凌晨有雨")
+
+    day = day_segments(segments)
+    rains = [s for s in day if s.category == "rain"]
+    if rains:
+        for segment in rains:
+            start = max(segment.start_hour, DAY_START_HOUR)
+            window = f"{start:02d} 時起" if segment.end_hour >= 24 else f"{start:02d}–{segment.end_hour:02d} 時"
+            # The window already says when, so drop any time-of-day prefix from the label.
+            label = _TIME_PREFIX.sub("", segment.label) or segment.label
+            text = f"{window} {label}"
+            if segment.max_pop is not None:
+                text += f" {segment.max_pop}%"
+            parts.append(text)
+    elif len(day) == 1:
+        parts.append(f"整天{day[0].label}")
+    elif day:
+        labels: list[str] = []
+        for segment in day:
+            if not labels or labels[-1] != segment.label:
+                labels.append(segment.label)
+        parts.append("轉".join(labels))
+
+    return "、".join(parts) if parts else "無資料"
+
+
+def emoji_bar(periods: list[Period]) -> str:
+    """A mini timeline: hour ticks with one glyph per 3-hour slot between them."""
+    by_hour = {p.start.hour: p.icon for p in periods}
+    marks = [f"{tick:02d} " + "".join(by_hour.get(h, "·") for h in (tick, tick + 3))
+             for tick in (6, 12, 18)]
+    return " ".join(marks) + " 24"
+
+
+def render_compact(forecast: DayForecast, bar: bool = False) -> str:
+    segments = segment_periods(forecast.periods)
+    temps = forecast.temperatures
+    temp = f" {min(temps)}–{max(temps)}°" if temps else ""
+    lines = [f"{headline_icon(forecast)} {forecast.location_name}{temp}"]
+    if bar:
+        lines.append(emoji_bar(forecast.periods))
+    detail = compact_timing(segments)
+    tips = advice(forecast, segments)
+    if tips:
+        detail += " · " + tips[0]  # one action only; the push has to stay glanceable
+    lines.append(detail)
+    return "\n".join(lines)
+
+
+def render_report(forecasts: list[DayForecast], style: str = "compact") -> str:
+    """Render one or more locations as the message that gets pushed."""
+    if style == "detail":
+        return "\n".join(render_detail(f) for f in forecasts)
+    day = forecasts[0].day
+    header = f"明天 {day.month}/{day.day}（{WEEKDAY_ZH[day.weekday()]}）"
+    blocks = [render_compact(f, bar=(style == "bar")) for f in forecasts]
+    return header + "\n\n" + "\n\n".join(blocks)
+
+
 def to_json(forecast: DayForecast) -> dict:
     return {
         "location": forecast.location_name,
         "date": forecast.day.isoformat(),
-        "text": render(forecast),
+        "icon": headline_icon(forecast),
+        "text": render_compact(forecast),
+        "detail": render_detail(forecast),
         "segments": [
             {
                 "start_hour": s.start_hour,
@@ -463,6 +565,12 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="中央氣象署明日天氣預報（繁體中文）")
     parser.add_argument("locations", nargs="*", help="縣市 或 縣市/鄉鎮區，例如 臺北市 新北市/三重區")
     parser.add_argument("--date", default="tomorrow", help="tomorrow（預設）、today 或 YYYY-MM-DD")
+    parser.add_argument(
+        "--style",
+        choices=["compact", "bar", "detail"],
+        default="compact",
+        help="compact（預設，推播用）、bar（加上時間軸圖示）、detail（完整敘述）",
+    )
     parser.add_argument("--json", action="store_true", help="輸出 JSON 而非純文字")
     parser.add_argument("--fixture", help="用本機 JSON 檔取代 API（測試用）")
     args = parser.parse_args(argv)
@@ -479,7 +587,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"錯誤：缺少環境變數 {API_KEY_ENV}（中央氣象署開放資料授權碼）", file=sys.stderr)
         return 2
 
-    results = []
+    forecasts: list[DayForecast] = []
+    failures: list[str] = []
     exit_code = 0
     for location in locations:
         try:
@@ -488,16 +597,20 @@ def main(argv: list[str] | None = None) -> int:
                     payload = json.load(handle)
             else:
                 payload = fetch_dataset(location, api_key)
-            results.append(to_json(extract_day(payload, location, day)))
+            forecasts.append(extract_day(payload, location, day))
         except (RuntimeError, KeyError, ValueError) as err:
             exit_code = 1
-            results.append({"location": location.display_name, "date": day.isoformat(), "error": str(err)})
+            failures.append(f"{location.display_name}：取得預報失敗，{err}")
 
     if args.json:
+        results = [to_json(f) for f in forecasts]
+        results += [{"error": message} for message in failures]
         print(json.dumps(results, ensure_ascii=False, indent=2))
     else:
-        for item in results:
-            print(item["text"] if "text" in item else f"{item['location']}：取得預報失敗，{item['error']}")
+        if forecasts:
+            print(render_report(forecasts, args.style))
+        for message in failures:
+            print(message, file=sys.stderr)
     return exit_code
 
 

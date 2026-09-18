@@ -15,7 +15,9 @@ Python 3.9+ standard library only; nothing to install.
 
 ```bash
 export CWA_API_KEY=CWA-...                       # CWA open-data key, never committed
-python3 forecast.py                              # default locations, tomorrow
+python3 forecast.py                              # default locations, tomorrow, compact
+python3 forecast.py --style bar                  # compact plus an emoji timeline row
+python3 forecast.py --style detail               # the long prose sentence
 python3 forecast.py 彰化縣/彰化市 --date 2026-09-20 --json
 python3 forecast.py --fixture tests/fixtures/sample.json --date 2026-09-19   # offline run
 
@@ -43,10 +45,15 @@ Everything lives in `forecast.py`, in four stages that are kept separate on purp
    with the same coarse category (`rain` / `sunny` / `cloudy` / `overcast`). A period is
    rain if its weather phrase contains 雨 or PoP ≥ `RAIN_POP_THRESHOLD`. This is where
    "when the rain starts" is decided; the wording layer never infers it.
-4. **Rendering.** `describe_segments` writes the timeline sentence using only 3-hour
-   grid phrases from `hour_phrase` (中午 12 點, 下午 3 點, 傍晚 6 點 …). Overnight
-   (00–06) rain is mentioned separately so the sentence stays about the day.
-   `render` adds temperature range, apparent-temperature note, and at most two tips.
+4. **Rendering, in three styles off the same segments.** `compact` (default, what the
+   push carries) is two lines per location: a headline glyph from `ICONS`, the name and
+   temperature range, then `compact_timing` — a 24-hour window like `12–18 時` plus one
+   action tip. `bar` inserts `emoji_bar`, a six-slot strip with ticks at 06/12/18/24.
+   `detail` is the original prose from `describe_segments`, which uses the spoken hour
+   phrases in `hour_phrase`. `render_report` puts one shared date header above the
+   compact styles; detail repeats the date per line because it reads as prose.
+   Overnight (00–06) rain is reported separately in every style so the day's own
+   description stays clean, and it never triggers the umbrella tip.
 
 `tests/fixtures/sample.json` is a hand-built payload in the CWA format covering
 2026-09-19 for both default locations; `FixtureTests` pin the exact output strings, so
@@ -65,5 +72,7 @@ update`, then mirror the change here. The Routine environment must allow
 - User-facing text is Traditional Chinese (zh-TW); code, identifiers, and commit
   messages are English.
 - Never state finer time resolution than the 3-hour data supports.
+- The push is the constrained surface: keep `compact` to two lines per location and one
+  tip. New information belongs in `bar` or `detail`, not in the push.
 - The script must fail loudly (non-zero exit, message on stderr) rather than emit a
   forecast it could not fetch; the Routine relies on that to avoid fabricating weather.

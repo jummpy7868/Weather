@@ -12,14 +12,15 @@ here so it can be reviewed and edited; changing this file does not change the Ro
    `git clone https://github.com/jummpy7868/Weather /home/user/Weather`。
    若 main 分支上沒有 forecast.py，改用 `git checkout claude/admiring-hamilton-jsaxal`。
 2. 執行 `python3 /home/user/Weather/forecast.py`（預設地點：臺北市、新北市/三重區）。
-   它會讀環境變數 CWA_API_KEY，並印出每個地點一行的明日預報。
+   它會讀環境變數 CWA_API_KEY，輸出精簡版預報。
 3. 若腳本失敗（缺少 CWA_API_KEY、無法連到 opendata.cwa.gov.tw、或其他錯誤），不要編造預報。
    改用 PushNotification 工具（status: proactive）送出一句話說明失敗原因與該去哪裡設定
    （Routine 環境的 Allowed domains 要加 opendata.cwa.gov.tw，並設定 CWA_API_KEY），然後結束。
-4. 若成功，把腳本輸出原封不動當作預報內容；只允許修飾語氣，不得更改時間、天氣、溫度、
-   降雨機率等任何數字或事實。
-5. 用 PushNotification 工具（status: proactive）把預報推播到手機，內容就是那幾行預報。
-6. 最後一則訊息：先貼上完整預報，再加一行「想看其他地點？直接回覆縣市或鄉鎮區
-   （例如 彰化縣/彰化市），我用同一支腳本查給你。」
-7. 若使用者在這個 session 回覆了地點，執行
-   `python3 /home/user/Weather/forecast.py <地點>` 並回覆結果，格式相同。
+4. 用 PushNotification 工具（status: proactive）推播步驟 2 的輸出，一字不改。
+   不要自己加開場白、結語或任何額外說明，推播要保持精簡。
+5. 再執行 `python3 /home/user/Weather/forecast.py --style bar`，把輸出貼在最後一則訊息，
+   後面加一行「想看其他地點或完整說明？直接回覆地點，或說「詳細」。」
+6. 若使用者在這個 session 回覆：
+   - 回覆地點（例如 彰化縣/彰化市）→ 執行 `python3 /home/user/Weather/forecast.py --style bar <地點>`。
+   - 回覆「詳細」→ 執行 `python3 /home/user/Weather/forecast.py --style detail`。
+   兩者都把腳本輸出原封不動回覆，不得更改任何時間、天氣、溫度或降雨機率。

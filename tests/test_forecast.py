@@ -12,12 +12,16 @@ from forecast import (  # noqa: E402
     TZ,
     Location,
     Period,
+    compact_timing,
     describe_segments,
+    emoji_bar,
     extract_day,
     hour_phrase,
     parse_location,
     rain_label,
-    render,
+    render_compact,
+    render_detail,
+    render_report,
     segment_periods,
 )
 
@@ -132,18 +136,68 @@ class WordingTests(unittest.TestCase):
         )
 
 
+class CompactTests(unittest.TestCase):
+    def test_rain_window_uses_24h_clock_and_drops_time_prefix(self):
+        segments = segment_periods(
+            [period(DAY, h, "多雲", 10) for h in range(0, 12, 3)]
+            + [period(DAY, 12, "多雲午後短暫雷陣雨", 70), period(DAY, 15, "多雲午後短暫雷陣雨", 60)]
+            + [period(DAY, h, "多雲", 20) for h in range(18, 24, 3)]
+        )
+        self.assertEqual(compact_timing(segments), "12–18 時 短暫雷陣雨 70%")
+
+    def test_rain_to_end_of_day_uses_open_window(self):
+        segments = segment_periods(
+            [period(DAY, h, "晴", 10) for h in range(0, 15, 3)]
+            + [period(DAY, h, "陰短暫雨", 70) for h in range(15, 24, 3)]
+        )
+        self.assertEqual(compact_timing(segments), "15 時起 短暫雨 70%")
+
+    def test_dry_day_collapses_to_one_phrase(self):
+        segments = segment_periods([period(DAY, h, "晴", 10) for h in range(0, 24, 3)])
+        self.assertEqual(compact_timing(segments), "整天晴")
+
+    def test_dry_day_with_change_uses_turn_phrase(self):
+        segments = segment_periods(
+            [period(DAY, h, "晴", 10) for h in range(0, 12, 3)]
+            + [period(DAY, h, "多雲", 20) for h in range(12, 24, 3)]
+        )
+        self.assertEqual(compact_timing(segments), "晴轉多雲")
+
+    def test_emoji_bar_has_three_ticks(self):
+        periods = [period(DAY, h, "晴", 10) for h in range(0, 12, 3)]
+        periods += [period(DAY, h, "多雲午後短暫雷陣雨", 70) for h in range(12, 18, 3)]
+        periods += [period(DAY, h, "多雲", 20) for h in range(18, 24, 3)]
+        self.assertEqual(emoji_bar(periods), "06 ☀️☀️ 12 ⛈️⛈️ 18 ⛅⛅ 24")
+
+
 class FixtureTests(unittest.TestCase):
-    def test_taipei_narrative(self):
+    def test_taipei_compact(self):
         day = extract_day(load_fixture(), parse_location("臺北市"), DAY)
         self.assertEqual(
-            render(day),
+            render_compact(day),
+            "⛈️ 臺北市 25–33°\n12–18 時 短暫雷陣雨 70% · 帶傘",
+        )
+
+    def test_taipei_detail_keeps_prose(self):
+        day = extract_day(load_fixture(), parse_location("臺北市"), DAY)
+        self.assertEqual(
+            render_detail(day),
             "明天 9/19（六）臺北市：早上 6 點到中午 12 點晴時多雲，中午 12 點起午後短暫雷陣雨（降雨機率 70%），"
             "傍晚 6 點前結束，之後轉多雲。氣溫 25 到 33 度，體感最高 37 度。建議帶傘、注意防曬與補水。",
         )
 
     def test_sanchong_overnight_rain_no_umbrella_tip(self):
         day = extract_day(load_fixture(), parse_location("新北市/三重區"), DAY)
-        self.assertEqual(render(day), "明天 9/19（六）新北市三重區：凌晨有雨，整天多雲。氣溫 25 到 32 度。")
+        self.assertEqual(render_compact(day), "⛅ 新北市三重區 25–32°\n凌晨有雨、整天多雲")
+
+    def test_report_has_one_shared_header(self):
+        days = [
+            extract_day(load_fixture(), parse_location("臺北市"), DAY),
+            extract_day(load_fixture(), parse_location("新北市/三重區"), DAY),
+        ]
+        report = render_report(days)
+        self.assertTrue(report.startswith("明天 9/19（六）\n\n"))
+        self.assertEqual(report.count("明天"), 1)
 
     def test_missing_day_raises(self):
         with self.assertRaises(RuntimeError):
@@ -160,18 +214,30 @@ class CliTests(unittest.TestCase):
     def run_cli(self, *args):
         return subprocess.run([sys.executable, self.SCRIPT, *args], capture_output=True, text=True)
 
-    def test_fixture_text_output_default_locations(self):
+    def test_default_style_is_compact(self):
         result = self.run_cli("--fixture", FIXTURE, "--date", "2026-09-19")
         self.assertEqual(result.returncode, 0, result.stderr)
+        lines = [line for line in result.stdout.strip().splitlines() if line]
+        self.assertEqual(lines[0], "明天 9/19（六）")
+        self.assertEqual(lines[1], "⛈️ 臺北市 25–33°")
+        self.assertEqual(lines[3], "⛅ 新北市三重區 25–32°")
+
+    def test_bar_style_adds_the_timeline_row(self):
+        result = self.run_cli("--fixture", FIXTURE, "--date", "2026-09-19", "--style", "bar")
+        self.assertIn("06 ☀️☀️ 12 ⛈️⛈️ 18 ⛅⛅ 24", result.stdout)
+
+    def test_detail_style_keeps_prose(self):
+        result = self.run_cli("--fixture", FIXTURE, "--date", "2026-09-19", "--style", "detail")
         lines = result.stdout.strip().splitlines()
         self.assertEqual(len(lines), 2)
         self.assertTrue(lines[0].startswith("明天 9/19（六）臺北市："))
-        self.assertTrue(lines[1].startswith("明天 9/19（六）新北市三重區："))
 
     def test_json_output(self):
         result = self.run_cli("--fixture", FIXTURE, "--date", "2026-09-19", "--json", "臺北市")
         data = json.loads(result.stdout)
         self.assertEqual(data[0]["location"], "臺北市")
+        self.assertEqual(data[0]["icon"], "⛈️")
+        self.assertIn("detail", data[0])
         self.assertEqual(data[0]["segments"][2]["category"], "rain")
 
     def test_missing_api_key_is_a_clear_error(self):
